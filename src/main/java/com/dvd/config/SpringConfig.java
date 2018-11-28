@@ -34,7 +34,7 @@ public class SpringConfig implements WebMvcConfigurer {
 	@Bean
 	public ViewResolver view() {
 		InternalResourceViewResolver viewResource = new InternalResourceViewResolver();
-		viewResource.setPrefix("/WEB-INF/view");
+		viewResource.setPrefix("/WEB-INF/view/");
 		viewResource.setSuffix(".jsp");
 		return viewResource;
 	}
@@ -55,18 +55,18 @@ public class SpringConfig implements WebMvcConfigurer {
 			dataSource.setDriverClass(env.getProperty("jdbc.driver"));
 		} catch (PropertyVetoException e) {	e.printStackTrace();}
 		
+		logger.info("<<< jdbc.driver="+env.getProperty("jdbc.driver"));
+		logger.info("<<< jdbc.url="+env.getProperty("jdbc.url"));
+		logger.info("<<< jdbc.user="+env.getProperty("jdbc.user"));
+		
 		dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
 		dataSource.setUser(env.getProperty("jdbc.user"));
 		dataSource.setPassword(env.getProperty("jbdc.password"));
 		
-		logger.info("<<< jdbc.driver = "+env.getProperty("jdbc.driver"));
-		logger.info("<<< jdbc.driver = "+env.getProperty("jdbc.url"));
-		logger.info("<<< jdbc.driver = "+env.getProperty("jdbc.user"));
-		
-		dataSource.setInitialPoolSize(getPool(env.getProperty("connection.pool.initialPoolSize")));
-		dataSource.setMinPoolSize(getPool(env.getProperty("connection.pool.minPoolSize")));
-		dataSource.setMaxPoolSize(getPool(env.getProperty("connection.pool.maxPoolSize")));
-		dataSource.setMaxIdleTime(getPool(env.getProperty("connection.pool.maxIdleTime")));
+		dataSource.setInitialPoolSize(getPool("connection.pool.initialPoolSize"));
+		dataSource.setMinPoolSize(getPool("connection.pool.minPoolSize"));
+		dataSource.setMaxPoolSize(getPool("connection.pool.maxPoolSize"));
+		dataSource.setMaxIdleTime(getPool("connection.pool.maxIdleTime"));
 		
 		return dataSource;	
 	}
